@@ -14,7 +14,7 @@ class PolaroidClient:
         ...
 
     @with_executor
-    def run_method(self, image: polaroid.Image, method: str, *args, **kwargs):
+    def run_method(self, image: polaroid.Image, method: str, *args, **kwargs) -> polaroid.Image:
         method = getattr(image, method, None)
         if method is None:
             raise ManipulationError("Image Method is invalid")
@@ -23,7 +23,7 @@ class PolaroidClient:
 
         return image if possible_result is None else possible_result
     
-    def create_image(self, image: bytes):
+    def create_image(self, image: bytes) -> polaroid.Image:
         return polaroid.Image(image)
     
 
