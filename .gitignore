@@ -1,0 +1,7 @@
+Lib/
+Scripts/
+apitests.py
+pyvenv.cfg
+share/
+__pycache__/
+.vscode/

@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+opencv-python
+scikit-image
+polaroid
+Pillow
