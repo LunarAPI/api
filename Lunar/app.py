@@ -1,7 +1,10 @@
 import asyncio
+import sentry_sdk
+import config
 
 from fastapi import FastAPI
 from starlette.middleware.base import BaseHTTPMiddleware
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 from routes.images import polaroid_, pillow_
 from routes.ml import chatbot
@@ -20,6 +23,8 @@ class App(FastAPI):
         local.router
     ]
 
-
+sentry_sdk.init(dsn=config.SENTRY_DSN)
 app = App(debug = True)
 app.add_middleware(BaseHTTPMiddleware, dispatch = authorize_request)
+asgi_app = SentryAsgiMiddleware(app)
+

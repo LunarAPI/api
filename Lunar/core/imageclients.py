@@ -9,6 +9,8 @@ from PIL import ImageOps as PillowOps
 from typing import Union, Tuple, Dict
 from io import BytesIO
 
+
+
 class PolaroidClient:
     def __init__(self) -> None:
         ...
@@ -32,13 +34,19 @@ class PolaroidClient:
 class PillowClient:
     DISCORD_BG = "#36393f"
     CRIMSON = "#ff0000"
+    IMAGETYPE = PillowImageType
+    IMAGELIB = PillowImage
 
     def __init__(self) -> None:
         self.masks: Dict[str, PillowImageType] = {}
     
-    def create_image(self, image: bytes) -> PillowImage:
-        img = PillowImage.open(BytesIO(image))
+    def create_image(self, image: Union[str, BytesIO]) -> PillowImageType:
+        if isinstance(image, str):
+            img = PillowImage.open(image)
+        else:
+            img = PillowImage.open(BytesIO(image))
         return img
+    
 
     @with_executor
     def run_image_method(self, image: PillowImageType, method: str, *args, **kwargs) -> PillowImageType:
@@ -87,3 +95,30 @@ class PillowClient:
         
         image = method(*args, **kwargs)
         return image
+
+    
+
+    def calculate_overlay(self, color, overlay):
+        if color < 33:
+            return overlay - 100
+        elif color > 233:
+            return overlay + 100
+        else:
+            return overlay - 133 + color
+
+
+    @with_executor
+    def apply_colour_overlay(self, image, color):
+        overlay_red, overlay_green, overlay_blue = color
+        channels = image.split()
+
+        r = channels[0].point(lambda color: self.calculate_overlay(color, overlay_red))
+        g = channels[1].point(lambda color: self.calculate_overlay(color, overlay_green))
+        b = channels[2].point(lambda color: self.calculate_overlay(color, overlay_blue))
+
+
+        channels[0].paste(r)
+        channels[1].paste(g)
+        channels[2].paste(b)
+
+        return PillowImage.merge(image.mode, channels)

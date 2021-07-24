@@ -2,5 +2,12 @@ fastapi
 uvicorn[standard]
 opencv-python
 scikit-image
-polaroid
 Pillow
+aiofiles
+aiohttp
+spacy
+scipy
+polaroid @ git+https://github.com/Daggy1234/polaroid@c759ccd965f4246e9873ec502d09a21ee31690a1
+en-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.1.0/en_core_web_trf-3.1.
+ChatterBot @ git+https://github.com/moanie/chatterbot@99d988afb04ba62d204e22b1510de3ad503dc167
+chatterbot-corpus @ git+https://github.com/gunthercox/chatterbot-corpus@ae8ccd2912baa79cf0412c3c0822835dab64059c
